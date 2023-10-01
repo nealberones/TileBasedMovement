@@ -1,0 +1,7 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1696143077
+floor.png::CompressedTexture2D::5727156236010191559::1696126688::1696126688::1::::<><>::
+icon.svg::CompressedTexture2D::5844552416287661994::1695800703::1695800713::1::::<><>::
+main.tscn::PackedScene::5492270082614946247::1696131188::0::1::::<><>::uid://cnujoq8svtjjj::::res://floor.png<>res://player.gd<>uid://jk603iny2l3o::::res://winston.png
+player.gd::GDScript::-1::1696126838::0::1::::<>CharacterBody2D<>::
+winston.png::CompressedTexture2D::654271725542318826::1695801172::1695801172::1::::<><>::
