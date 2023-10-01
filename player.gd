@@ -8,7 +8,6 @@ extends Sprite2D
 
 const tile_size = 16  # Adjust this based on your tile size
 var current_tile = Vector2(1, 1)
-
 var is_moving = false
 
 func _physics_process(delta):
@@ -71,7 +70,7 @@ func move(direction: Vector2):
 
 	if tile_data.get_custom_data('Teleporter') == true:
 			#teleport to random tile or other teleporter (Make sure to 'paint' custom data value on tileset)
-		teleport()
+		teleport(target_tile)
 	if tile_data.get_custom_data('Force') == true:
 			#forced movement tile
 		var force_direction: Vector2 = tile_data.get_custom_data('ForcDirection')
@@ -94,27 +93,52 @@ func move_force(direction: Vector2):
 	# Update the sprite position
 	sprite_2d.global_position = tile_map.map_to_local(current_tile)
 
-func teleport():
-	# Find all teleporter tiles in the map
+func teleport(target_tile):
+	#Find all teleporter tiles in the map
+	is_moving = not is_moving
 	var teleporter_tiles: Array = []
-
+	teleporter_tiles.append(Vector2i(10, 3))
+	teleporter_tiles.append(Vector2i(15, 2))
+	teleporter_tiles.append(Vector2i(19, 2))
+	teleporter_tiles.append(Vector2i(31, 11))
+	
+	for i in range (teleporter_tiles.size()):
+		prints(teleporter_tiles[i])
+	
+	if(target_tile == teleporter_tiles[0]):
+		sprite_2d.global_position = tile_map.map_to_local(teleporter_tiles[1])
+		current_tile = teleporter_tiles[1]
+		prints("landed on teleporter 1")
+	elif(target_tile == teleporter_tiles[1]):
+		sprite_2d.global_position = tile_map.map_to_local(teleporter_tiles[0])
+		current_tile = teleporter_tiles[0]
+	elif(target_tile == teleporter_tiles[2]):
+		sprite_2d.global_position = tile_map.map_to_local(teleporter_tiles[3])
+		current_tile = teleporter_tiles[3]
+	elif(target_tile == teleporter_tiles[3]):
+		sprite_2d.global_position = tile_map.map_to_local(teleporter_tiles[2])
+		current_tile = teleporter_tiles[2]
+		
+	global_position=sprite_2d.global_position
+	
+	
 	# Iterate through all tiles to find those with the 'Teleporter' custom value
-	for x in range(tile_map.get_used_rect().size.x):
-		for y in range(tile_map.get_used_rect().size.y):
-			var tile_pos = Vector2i(x, y)
-			var tile_data_tp: TileData = tile_map.get_cell_tile_data(0,tile_pos)
-			
-			if tile_data_tp.get_custom_data('Teleporter') == true:
-				teleporter_tiles.append(tile_pos)
-
-	if teleporter_tiles.size() > 0:
-		# Pick a random teleporter tile
-		var random_index: int = randi() % teleporter_tiles.size()
-		var random_teleporter: Vector2i = teleporter_tiles[random_index]
-
-		# Set the player's position to the teleporter tile
-		global_position = tile_map.map_to_local(random_teleporter)
-
-		# Update the current tile
-		current_tile = random_teleporter
+#	for x in range(tile_map.get_used_rect().size.x):
+#		for y in range(tile_map.get_used_rect().size.y):
+#			var tile_pos = Vector2i(x, y)
+#			var tile_data_tp: TileData = tile_map.get_cell_tile_data(0,tile_pos)
+#
+#			if tile_data_tp.get_custom_data('Teleporter') == true:
+#				teleporter_tiles.append(tile_pos)
+#
+#	if teleporter_tiles.size() > 0:
+#		# Pick a random teleporter tile
+#		var random_index: int = randi() % teleporter_tiles.size()
+#		var random_teleporter: Vector2i = teleporter_tiles[random_index]
+#
+#		# Set the player's position to the teleporter tile
+#		global_position = tile_map.map_to_local(random_teleporter)
+#
+#		# Update the current tile
+#		current_tile = random_teleporter
 
