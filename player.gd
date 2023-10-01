@@ -3,6 +3,9 @@ extends Sprite2D
 @onready var tile_map = $"../TileMap"
 @onready var sprite_2d = $Sprite2D
 @onready var ray_cast_2d = $RayCast2D
+@onready var animation_tree = $AnimationTree
+@onready var state_machine = animation_tree.get("parameters/playback")
+
 const tile_size = 16  # Adjust this based on your tile size
 var current_tile = Vector2(1, 1)
 
@@ -10,6 +13,7 @@ var is_moving = false
 
 func _physics_process(delta):
 	if is_moving == false:
+		state_machine.travel("Idle")
 		return
 		
 	if global_position == sprite_2d.global_position:
@@ -19,6 +23,7 @@ func _physics_process(delta):
 	sprite_2d.global_position = sprite_2d.global_position.move_toward(global_position, 1)
 func _process(delta):
 	if is_moving:
+		state_machine.travel("walk")
 		return
 	
 	if Input.is_action_pressed("ui_up"):
@@ -29,8 +34,14 @@ func _process(delta):
 		move(Vector2.LEFT)
 	elif Input.is_action_pressed("ui_right"):
 		move(Vector2.RIGHT)
+	
+	
 
 func move(direction: Vector2):
+	
+	
+	animation_tree.set("parameters/Idle/blend_position", direction)
+	animation_tree.set("parameters/walk/blend_position",direction)
 	#current tile
 	var current_tile: Vector2i = tile_map.local_to_map(global_position)
 	# get target tile
