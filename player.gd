@@ -69,52 +69,18 @@ func move(direction: Vector2):
 	
 	sprite_2d.global_position = tile_map.map_to_local(current_tile)
 
-	if tile_data.get_custom_data('Teleporter') == true:
-			#teleport to random tile or other teleporter (Make sure to 'paint' custom data value on tileset)
-		teleport()
+	#if tile_data.get_custom_data('Teleporter') == true:
+		#teleport()
+	
 	if tile_data.get_custom_data('Force') == true:
-			#forced movement tile
-		var force_direction: Vector2 = tile_data.get_custom_data('ForcDirection')
-		move_force(force_direction)
+		move_force(Vector2.DOWN)
 
 func move_force(direction: Vector2):
-	# Check if the force movement is valid (not blocked by obstacles)
-	var target_tile: Vector2i = current_tile + direction
+	
+	move(direction)
+	
+#func teleport(direction: Vector2):
+	
+	#var current_tile = Vector2(5, 1)
 
-	var tile_data_force: TileData = tile_map.get_cell_tile_data(0, target_tile)
-
-	if tile_data_force.get_custom_data('Walkable') == false:
-		return
-
-	# Move the player to the force direction
-	is_moving = true
-	global_position = tile_map.map_to_local(target_tile)
-	current_tile = target_tile
-
-	# Update the sprite position
-	sprite_2d.global_position = tile_map.map_to_local(current_tile)
-
-func teleport():
-	# Find all teleporter tiles in the map
-	var teleporter_tiles: Array = []
-
-	# Iterate through all tiles to find those with the 'Teleporter' custom value
-	for x in range(tile_map.get_used_rect().size.x):
-		for y in range(tile_map.get_used_rect().size.y):
-			var tile_pos = Vector2i(x, y)
-			var tile_data_tp: TileData = tile_map.get_cell_tile_data(0,tile_pos)
-			
-			if tile_data_tp.get_custom_data('Teleporter') == true:
-				teleporter_tiles.append(tile_pos)
-
-	if teleporter_tiles.size() > 0:
-		# Pick a random teleporter tile
-		var random_index: int = randi() % teleporter_tiles.size()
-		var random_teleporter: Vector2i = teleporter_tiles[random_index]
-
-		# Set the player's position to the teleporter tile
-		global_position = tile_map.map_to_local(random_teleporter)
-
-		# Update the current tile
-		current_tile = random_teleporter
 
